@@ -1,25 +1,47 @@
-import logo from './logo.svg';
-import './App.css';
+import "./App.css";
+import React, { useState } from "react";
+import { Typography } from "@mui/material";
+import Patient from "./components/Patient";
 
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+	const [patients, setPatients] = useState([
+		{
+			id: 1,
+			name: "Harry Potter",
+			age: 30,
+			main_diagnosis: "Headache",
+			date_of_birth: "1980-07-31",
+		},
+		{
+			id: 2,
+			name: "Hermione Granger",
+			age: 25,
+			main_diagnosis: "Cat allergy",
+			date_of_birth: "1985-09-19",
+		},
+	]);
+
+	// const [newPatient, setNewPatient] = useState({});
+
+	return (
+		<div className="App">
+			<React.StrictMode>
+				<div>
+					<Typography variant="h2">Patients</Typography>
+				</div>
+				{patients.map((patient) => {
+					return (
+						<Patient
+							key={patient.id}
+							name={patient.name}
+							age={patient.age}
+							main_diagnosis={patient.main_diagnosis}
+						/>
+					);
+				})}
+			</React.StrictMode>
+		</div>
+	);
 }
 
 export default App;
