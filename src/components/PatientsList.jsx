@@ -2,25 +2,12 @@
 import React from "react";
 import { Typography } from "@mui/material";
 import axios from "axios";
+import Patient from "./Patient";
 
 const PatientsContext = React.createContext();
 
 export default function PatientsList() {
 	const [patients, setPatients] = React.useState([]);
-
-	// const fetchPatients = async () => {
-	// 	try {
-	// 		const response = await axios.get("http://localhost:5000/patients");
-	// 		setPatients(response.data);
-	// 	} catch (error) {
-	// 		console.error(error);
-	// 	}
-
-	// 	// const response = await axios.get("http://localhost:8000/patient");
-	// 	// const patients = await response.json();
-	// 	// console.log(patients.data);
-	// 	// setPatients(patients.data);
-	// };
 
 	React.useEffect(() => {
 		axios
@@ -39,9 +26,14 @@ export default function PatientsList() {
 			<Typography variant="h3">Patients</Typography>
 			{patients.map((patient) => {
 				return (
-					<Typography key={patient.id} variant="h6">
-						Name: {patient.name}
-					</Typography>
+					<Patient
+						key={patient.id}
+						variant="h6"
+						name={patient.name}
+						age={patient.age}
+						main_diagnosis={patient.main_diagnosis}
+						date_of_birth={patient.date_of_birth}
+					/>
 				);
 			})}
 		</PatientsContext.Provider>
