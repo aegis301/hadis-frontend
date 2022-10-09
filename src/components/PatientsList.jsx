@@ -1,19 +1,26 @@
-// import Patient from "./Patient";
 import React from "react";
-import { Typography } from "@mui/material";
 import axios from "axios";
-import Patient from "./Patient";
+import { DataGrid } from "@mui/x-data-grid";
+import { Typography } from "@mui/material";
 
 const PatientsContext = React.createContext();
 
+const columns = [
+	{ field: "id", headerName: "ID", width: 100 },
+	{ field: "name", headerName: "Name", width: 200 },
+	{ field: "age", headerName: "Age", width: 30 },
+	{ field: "main_diagnosis", headerName: "Main diagnosis", width: 250 },
+	{ field: "date_of_birth", headerName: "Date of birth", width: 100 },
+];
+
 export default function PatientsList() {
 	const [patients, setPatients] = React.useState([]);
+	const rows = patients;
 
 	React.useEffect(() => {
 		axios
 			.get("http://localhost:8000/patient")
 			.then((response) => {
-				console.log(response.data.payload);
 				setPatients(response.data.payload);
 			})
 			.catch((error) => {
@@ -23,19 +30,19 @@ export default function PatientsList() {
 
 	return (
 		<PatientsContext.Provider value={patients}>
-			<Typography variant="h3">Patients</Typography>
-			{patients.map((patient) => {
-				return (
-					<Patient
-						key={patient.id}
-						variant="h6"
-						name={patient.name}
-						age={patient.age}
-						main_diagnosis={patient.main_diagnosis}
-						date_of_birth={patient.date_of_birth}
-					/>
-				);
-			})}
+			<div style={{ height: 400, width: "100%" }}>
+				<Typography variant="h4" component="h1" gutterBottom>
+					{" "}
+					Patients{" "}
+				</Typography>
+				<DataGrid
+					rows={rows}
+					columns={columns}
+					pageSize={5}
+					rowsPerPageOptions={[5]}
+					checkboxSelection
+				/>
+			</div>
 		</PatientsContext.Provider>
 	);
 }
