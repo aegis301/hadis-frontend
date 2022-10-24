@@ -1,7 +1,14 @@
 import React from "react";
 import axios from "axios";
 import { DataGrid } from "@mui/x-data-grid";
-import { Button, Grid, Typography, TextField } from "@mui/material";
+import { Button, Grid, Typography, TextField, Link } from "@mui/material";
+import Table from "@mui/material/Table";
+import TableBody from "@mui/material/TableBody";
+import TableCell from "@mui/material/TableCell";
+import TableContainer from "@mui/material/TableContainer";
+import TableHead from "@mui/material/TableHead";
+import TableRow from "@mui/material/TableRow";
+import Paper from "@mui/material/Paper";
 
 const PatientsContext = React.createContext({
 	patients: [],
@@ -94,23 +101,23 @@ function AddPatient() {
 	);
 }
 
-function UpdateTodo({ patient, id }) {
-	const [patient, setPatient] = React.useState(patient);
-	const { fetchPatients } = React.useContext(PatientsContext);
+// function UpdateTodo({ patient, id }) {
+// 	const [patient, setPatient] = React.useState(patient);
+// 	const { fetchPatients } = React.useContext(PatientsContext);
 
-	const updateTodo = () => {
-		axios
-			.put(`http://localhost:8000/patient/${id}`, patient)
-			.then((response) => {
-				console.log(response);
-				onClose();
-				fetchPatients();
-			})
-			.catch((error) => {
-				console.log(error);
-			});
-	};
-}
+// 	const updateTodo = () => {
+// 		axios
+// 			.put(`http://localhost:8000/patient/${id}`, patient)
+// 			.then((response) => {
+// 				console.log(response);
+// 				onClose();
+// 				fetchPatients();
+// 			})
+// 			.catch((error) => {
+// 				console.log(error);
+// 			});
+// 	};
+// }
 
 export default function PatientsList() {
 	const [patients, setPatients] = React.useState([]);
@@ -139,17 +146,50 @@ export default function PatientsList() {
 						<Typography variant="h4" component="h1" gutterBottom>
 							Patients
 						</Typography>
-						<DataGrid
-							rows={rows}
-							columns={columns}
-							pageSize={5}
-							rowsPerPageOptions={[5]}
-							checkboxSelection
-						/>
+
+						<TableContainer component={Paper}>
+							<Table sx={{ minWidth: 650 }} aria-label="simple table">
+								<TableHead>
+									<TableRow>
+										<TableCell>ID</TableCell>
+										<TableCell align="right">Name</TableCell>
+										<TableCell align="right">Age</TableCell>
+										<TableCell align="right">Main diagnosis</TableCell>
+										<TableCell align="right">Date of birth</TableCell>
+									</TableRow>
+								</TableHead>
+								<TableBody>
+									{patients.map((patient) => (
+										<TableRow
+											key={patient.id}
+											sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+										>
+											<TableCell component="th" scope="row">
+												{patient.id}
+											</TableCell>
+											<TableCell align="right">{patient.name}</TableCell>
+											<TableCell align="right">{patient.age}</TableCell>
+											<TableCell align="right">
+												{patient.main_diagnosis}
+											</TableCell>
+											<TableCell align="right">
+												{patient.date_of_birth}
+											</TableCell>
+											<TableCell>
+												<Button>Edit</Button>
+											</TableCell>
+											<TableCell>
+												<Button>Delete</Button>
+											</TableCell>
+										</TableRow>
+									))}
+								</TableBody>
+							</Table>
+						</TableContainer>
 					</div>
 				</Grid>
 			</Grid>
-			<Grid container sx={{ mt: 10 }}>
+			<Grid container sx={{ mt: 60 }}>
 				<Grid item>
 					<AddPatient />
 				</Grid>
