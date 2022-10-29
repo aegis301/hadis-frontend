@@ -1,27 +1,38 @@
 import React from "react";
 import axios from "axios";
-import { DataGrid } from "@mui/x-data-grid";
-import { Button, Grid, Typography, TextField, Link } from "@mui/material";
+import Button from "@mui/material/Button";
+import Grid from "@mui/material/Grid";
+import Typography from "@mui/material/Typography";
+import TextField from "@mui/material/TextField";
 import Table from "@mui/material/Table";
 import TableBody from "@mui/material/TableBody";
 import TableCell from "@mui/material/TableCell";
+import TableRow from "@mui/material/TableRow";
 import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
-import TableRow from "@mui/material/TableRow";
 import Paper from "@mui/material/Paper";
+import IconButton from "@mui/material/IconButton";
+import Dialog from "@mui/material/Dialog";
+import DialogActions from "@mui/material/DialogActions";
+import DialogContent from "@mui/material/DialogContent";
+import DialogContentText from "@mui/material/DialogContentText";
+import DialogTitle from "@mui/material/DialogTitle";
+
+import { Delete, Edit } from "@mui/icons-material";
 
 const PatientsContext = React.createContext({
 	patients: [],
 	fetchPatients: () => {},
 });
 
-const columns = [
-	{ field: "id", headerName: "ID", width: 100 },
-	{ field: "name", headerName: "Name", width: 200 },
-	{ field: "age", headerName: "Age", width: 30 },
-	{ field: "main_diagnosis", headerName: "Main diagnosis", width: 250 },
-	{ field: "date_of_birth", headerName: "Date of birth", width: 100 },
-];
+// for data grid
+// const columns = [
+// 	{ field: "id", headerName: "ID", width: 100 },
+// 	{ field: "name", headerName: "Name", width: 200 },
+// 	{ field: "age", headerName: "Age", width: 30 },
+// 	{ field: "main_diagnosis", headerName: "Main diagnosis", width: 250 },
+// 	{ field: "date_of_birth", headerName: "Date of birth", width: 100 },
+// ];
 
 function AddPatient() {
 	const defaultValues = {
@@ -34,7 +45,6 @@ function AddPatient() {
 	const [newPatient, setNewPatient] = React.useState(defaultValues);
 	const { fetchPatients } = React.useContext(PatientsContext);
 
-	// this is not working
 	const handleInputChange = (event) => {
 		const value = event.target.value;
 		setNewPatient({ ...newPatient, [event.target.name]: value });
@@ -101,27 +111,94 @@ function AddPatient() {
 	);
 }
 
-// function UpdateTodo({ patient, id }) {
-// 	const [patient, setPatient] = React.useState(patient);
-// 	const { fetchPatients } = React.useContext(PatientsContext);
+function UpdateTodo({ patientToUpdate, id }) {
+	const [open, setOpen] = React.useState(false);
+	const [patient, setPatient] = React.useState(patientToUpdate);
+	const { fetchPatients } = React.useContext(PatientsContext);
 
-// 	const updateTodo = () => {
-// 		axios
-// 			.put(`http://localhost:8000/patient/${id}`, patient)
-// 			.then((response) => {
-// 				console.log(response);
-// 				onClose();
-// 				fetchPatients();
-// 			})
-// 			.catch((error) => {
-// 				console.log(error);
-// 			});
-// 	};
-// }
+	const handleClickOpen = () => {
+		setOpen(true);
+	};
+
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	const updateTodo = () => {
+		axios
+			.put(`http://localhost:8000/patient/${id}`, patient)
+			.then((response) => {
+				console.log(response);
+				handleClose();
+				fetchPatients();
+			})
+			.catch((error) => {
+				console.log(error);
+			});
+	};
+
+	return (
+		<div>
+			<IconButton aria-label="edit" onClick={handleClickOpen}>
+				<Edit />
+			</IconButton>
+			<Dialog open={open} onClose={handleClose}>
+				<DialogTitle>Update patient</DialogTitle>
+				<DialogContent>
+					<DialogContentText>Update the patient below:</DialogContentText>
+					<TextField
+						id="patient-name-input"
+						name="name"
+						value={patient.name}
+						type="text"
+						label="Name"
+						onChange={(e) => setPatient({ ...patient, name: e.target.value })}
+					/>
+					<TextField
+						id="age-input"
+						name="age"
+						label="Age"
+						type="number"
+						value={patient.age}
+						onChange={(e) => setPatient({ ...patient, age: e.target.value })}
+					/>
+					<TextField
+						id="main-diagnosis-input"
+						name="main_diagnosis"
+						label="Main Diagnosis"
+						type="text"
+						value={patient.main_diagnosis}
+						onChange={(e) =>
+							setPatient({ ...patient, main_diagnosis: e.target.value })
+						}
+					/>
+					<TextField
+						id="dob-input"
+						name="date_of_birth"
+						label="Date of Birth"
+						type="text"
+						value={patient.date_of_birth}
+						onChange={(e) =>
+							setPatient({ ...patient, date_of_birth: e.target.value })
+						}
+					/>
+				</DialogContent>
+				<DialogActions>
+					<Button onClick={handleClose} color="outlined">
+						Cancel
+					</Button>
+					<Button onClick={updateTodo} color="primary">
+						Update
+					</Button>
+				</DialogActions>
+			</Dialog>
+		</div>
+	);
+}
 
 export default function PatientsList() {
 	const [patients, setPatients] = React.useState([]);
-	const rows = patients;
+	// const rows = patients; // for data grid
 
 	const fetchPatients = async () => {
 		axios
@@ -176,7 +253,11 @@ export default function PatientsList() {
 												{patient.date_of_birth}
 											</TableCell>
 											<TableCell>
-												<Button>Edit</Button>
+												<UpdateTodo
+													patientToUpdate={patient}
+													id={patient.id}
+													fetchPatients={fetchPatients}
+												/>
 											</TableCell>
 											<TableCell>
 												<Button>Delete</Button>
