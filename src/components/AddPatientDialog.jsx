@@ -28,10 +28,11 @@ export default function AddPatientForm({ open, handleClose }) {
 		setNewPatient({ ...newPatient, [event.target.name]: value });
 	};
 
-	const handleSubmit = (event) => {
+	const handleSubmit = () => {
 		axios
 			.post("http://localhost:8000/patient", newPatient)
 			.then((response) => {
+				console.log(response);
 				handleClose();
 				fetchPatients(); // seems not to work right now
 			})
