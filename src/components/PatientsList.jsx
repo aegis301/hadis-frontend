@@ -10,6 +10,7 @@ import TableContainer from "@mui/material/TableContainer";
 import TableHead from "@mui/material/TableHead";
 import Paper from "@mui/material/Paper";
 import AddPatientDialog from "./AddPatientDialog";
+import DeletePatientDialog from "./DeletePatientDialog";
 import UpdatePatientDialog from "./UpdatePatientDialog";
 import IconButton from "@mui/material/IconButton";
 import { Add } from "@mui/icons-material";
@@ -92,6 +93,9 @@ export default function PatientsList() {
 													patientToUpdate={patient}
 													id={patient.id}
 												/>
+											</TableCell>
+											<TableCell>
+												<DeletePatientDialog id={patient.id} />
 											</TableCell>
 										</TableRow>
 									))}

@@ -11,7 +11,7 @@ import DialogContent from "@mui/material/DialogContent";
 import DialogContentText from "@mui/material/DialogContentText";
 import DialogTitle from "@mui/material/DialogTitle";
 
-import { Delete, Edit } from "@mui/icons-material";
+import { Edit } from "@mui/icons-material";
 
 const PatientsContext = React.createContext({
 	patients: [],
@@ -24,12 +24,6 @@ export default function UpdatePatientDialog(patientToUpdate, id) {
 	const { fetchPatients } = React.useContext(PatientsContext);
 
 	const handleClickOpen = () => {
-		console.log(open);
-		console.log(setOpen);
-		console.log(patient);
-		console.log(setPatient);
-		console.log(fetchPatients);
-
 		setOpen(true);
 	};
 
@@ -99,9 +93,7 @@ export default function UpdatePatientDialog(patientToUpdate, id) {
 					/>
 				</DialogContent>
 				<DialogActions>
-					<Button onClick={handleClose} color="outlined">
-						Cancel
-					</Button>
+					<Button onClick={handleClose}>Cancel</Button>
 					<Button onClick={updatePatient} color="primary">
 						Update
 					</Button>
