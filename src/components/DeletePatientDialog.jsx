@@ -16,12 +16,13 @@ const PatientsContext = React.createContext({
 	fetchPatients: () => {},
 });
 
-export default function DeletePatientDialog(patientToDelete, id) {
+export default function DeletePatientDialog(patientToDelete) {
 	const [open, setOpen] = React.useState(false);
-	const [patient] = React.useState(patientToDelete);
+	const patient = patientToDelete.patientToDelete;
 	const { fetchPatients } = React.useContext(PatientsContext);
 
 	const handleClickOpen = () => {
+		console.log(patient);
 		setOpen(true);
 	};
 	const handleClose = () => {
@@ -30,13 +31,15 @@ export default function DeletePatientDialog(patientToDelete, id) {
 
 	const deletePatient = () => {
 		axios
-			.delete(`http://localhost:8000/patient/${id}`, patient)
+			.delete(`http://localhost:8000/patient/${patient.id}`)
 			.then((response) => {
+				console.log(patient.id);
 				console.log(response);
 				handleClose();
 				fetchPatients();
 			})
 			.catch((error) => {
+				console.log(patient.patientToDelete);
 				console.log(error);
 			});
 	};

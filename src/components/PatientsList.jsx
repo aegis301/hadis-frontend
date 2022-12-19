@@ -95,7 +95,7 @@ export default function PatientsList() {
 												/>
 											</TableCell>
 											<TableCell>
-												<DeletePatientDialog id={patient.id} />
+												<DeletePatientDialog patientToDelete={patient} />
 											</TableCell>
 										</TableRow>
 									))}
