@@ -1,19 +1,19 @@
 import React from "react";
 import axios from "axios";
-import Button from "@mui/material/Button";
-import TextField from "@mui/material/TextField";
-import Dialog from "@mui/material/Dialog";
-import DialogActions from "@mui/material/DialogActions";
-import DialogContent from "@mui/material/DialogContent";
-import DialogContentText from "@mui/material/DialogContentText";
-import DialogTitle from "@mui/material/DialogTitle";
+import {
+	IconButton,
+	Button,
+	TextField,
+	Dialog,
+	DialogActions,
+	DialogContent,
+	DialogContentText,
+	DialogTitle,
+} from "@mui/material";
 
-const PatientsContext = React.createContext({
-	patients: [],
-	fetchPatients: () => {},
-});
+import { Add } from "@mui/icons-material";
 
-export default function AddPatientForm({ open, handleClose }) {
+export default function AddPatientForm({ fetchPatients }) {
 	const defaultValues = {
 		name: "",
 		age: "",
@@ -21,7 +21,7 @@ export default function AddPatientForm({ open, handleClose }) {
 		date_of_birth: "",
 	};
 	const [newPatient, setNewPatient] = React.useState(defaultValues);
-	const { fetchPatients } = React.useContext(PatientsContext);
+	const [open, setOpen] = React.useState(false);
 
 	const handleInputChange = (event) => {
 		const value = event.target.value;
@@ -41,58 +41,71 @@ export default function AddPatientForm({ open, handleClose }) {
 			});
 	};
 
-	return (
-		<Dialog open={open} onClose={handleClose}>
-			<DialogTitle id="dialog-title">Add patient</DialogTitle>
-			<DialogContent>
-				<DialogContentText id="dialog-description">
-					Add a new patient below:
-				</DialogContentText>
+	const handleClickOpen = () => {
+		setOpen(!open);
+	};
 
-				<TextField
-					id="patient-name-input"
-					name="name"
-					value={newPatient.name}
-					type="text"
-					label="Name"
-					onChange={handleInputChange}
-				/>
-				<TextField
-					id="age-input"
-					name="age"
-					label="Age"
-					type="number"
-					value={newPatient.age}
-					onChange={handleInputChange}
-				/>
-				<TextField
-					id="main-diagnosis-input"
-					name="main_diagnosis"
-					label="Main Diagnosis"
-					type="text"
-					value={newPatient.main_diagnosis}
-					onChange={handleInputChange}
-				/>
-				<TextField
-					id="dob-input"
-					name="date_of_birth"
-					label="Date of Birth"
-					type="text"
-					value={newPatient.date_of_birth}
-					onChange={handleInputChange}
-				/>
-				<DialogActions>
-					<Button onClick={handleClose}>Cancel</Button>
-					<Button
-						onClick={handleSubmit}
-						variant="contained"
-						color="primary"
-						type="submit"
-					>
-						Submit
-					</Button>
-				</DialogActions>
-			</DialogContent>
-		</Dialog>
+	const handleClose = () => {
+		setOpen(false);
+	};
+
+	return (
+		<div>
+			<IconButton aria-label="add" onClick={() => handleClickOpen()}>
+				<Add />
+			</IconButton>
+			<Dialog open={open} onClose={handleClose}>
+				<DialogTitle id="dialog-title">Add patient</DialogTitle>
+				<DialogContent>
+					<DialogContentText id="dialog-description">
+						Add a new patient below:
+					</DialogContentText>
+
+					<TextField
+						id="patient-name-input"
+						name="name"
+						value={newPatient.name}
+						type="text"
+						label="Name"
+						onChange={handleInputChange}
+					/>
+					<TextField
+						id="age-input"
+						name="age"
+						label="Age"
+						type="number"
+						value={newPatient.age}
+						onChange={handleInputChange}
+					/>
+					<TextField
+						id="main-diagnosis-input"
+						name="main_diagnosis"
+						label="Main Diagnosis"
+						type="text"
+						value={newPatient.main_diagnosis}
+						onChange={handleInputChange}
+					/>
+					<TextField
+						id="dob-input"
+						name="date_of_birth"
+						label="Date of Birth"
+						type="text"
+						value={newPatient.date_of_birth}
+						onChange={handleInputChange}
+					/>
+					<DialogActions>
+						<Button onClick={handleClose}>Cancel</Button>
+						<Button
+							onClick={handleSubmit}
+							variant="contained"
+							color="primary"
+							type="submit"
+						>
+							Submit
+						</Button>
+					</DialogActions>
+				</DialogContent>
+			</Dialog>
+		</div>
 	);
 }

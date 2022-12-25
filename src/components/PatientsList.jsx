@@ -12,8 +12,6 @@ import Paper from "@mui/material/Paper";
 import AddPatientDialog from "./AddPatientDialog";
 import DeletePatientDialog from "./DeletePatientDialog";
 import UpdatePatientDialog from "./UpdatePatientDialog";
-import IconButton from "@mui/material/IconButton";
-import { Add } from "@mui/icons-material";
 
 const PatientsContext = React.createContext({
 	patients: [],
@@ -22,7 +20,6 @@ const PatientsContext = React.createContext({
 
 export default function PatientsList() {
 	const [patients, setPatients] = React.useState([]);
-	const [open, setOpen] = React.useState(false);
 	// const rows = patients; // for data grid
 
 	const fetchPatients = async () => {
@@ -40,19 +37,9 @@ export default function PatientsList() {
 		fetchPatients();
 	}, []);
 
-	const handleClickOpen = () => {
-		setOpen(!open);
-	};
-
 	return (
 		<PatientsContext.Provider value={{ patients, fetchPatients }}>
-			<IconButton aria-label="add" onClick={() => handleClickOpen()}>
-				<Add />
-			</IconButton>
-			<AddPatientDialog
-				open={open}
-				handleClose={() => setOpen(false)}
-			></AddPatientDialog>
+			<AddPatientDialog fetchPatients={fetchPatients}></AddPatientDialog>
 			<Grid container>
 				<Grid item xs={12}>
 					<div style={{ height: 400 }}>
@@ -95,7 +82,10 @@ export default function PatientsList() {
 												/>
 											</TableCell>
 											<TableCell>
-												<DeletePatientDialog patientToDelete={patient} />
+												<DeletePatientDialog
+													patientToDelete={patient}
+													fetchPatients={fetchPatients}
+												/>
 											</TableCell>
 										</TableRow>
 									))}

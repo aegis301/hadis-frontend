@@ -11,15 +11,12 @@ import {
 } from "@mui/material";
 import { Delete } from "@mui/icons-material";
 
-const PatientsContext = React.createContext({
-	patients: [],
-	fetchPatients: () => {},
-});
-
-export default function DeletePatientDialog(patientToDelete) {
+export default function DeletePatientDialog({
+	patientToDelete,
+	fetchPatients,
+}) {
 	const [open, setOpen] = React.useState(false);
-	const patient = patientToDelete.patientToDelete;
-	const { fetchPatients } = React.useContext(PatientsContext);
+	const patient = patientToDelete;
 
 	const handleClickOpen = () => {
 		console.log(patient);
@@ -39,8 +36,8 @@ export default function DeletePatientDialog(patientToDelete) {
 				fetchPatients();
 			})
 			.catch((error) => {
-				console.log(patient.patientToDelete);
-				console.log(error);
+				console.log("Patient: ", patient);
+				console.log("Error Message: ", error);
 			});
 	};
 
