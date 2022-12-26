@@ -78,7 +78,7 @@ export default function PatientsList() {
 											<TableCell>
 												<UpdatePatientDialog
 													patientToUpdate={patient}
-													id={patient.id}
+													fetchPatients={fetchPatients}
 												/>
 											</TableCell>
 											<TableCell>

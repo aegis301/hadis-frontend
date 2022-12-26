@@ -13,17 +13,15 @@ import DialogTitle from "@mui/material/DialogTitle";
 
 import { Edit } from "@mui/icons-material";
 
-const PatientsContext = React.createContext({
-	patients: [],
-	fetchPatients: () => {},
-});
-
-export default function UpdatePatientDialog(patientToUpdate, id) {
+export default function UpdatePatientDialog({
+	patientToUpdate,
+	fetchPatients,
+}) {
 	const [open, setOpen] = React.useState(false);
 	const [patient, setPatient] = React.useState(patientToUpdate);
-	const { fetchPatients } = React.useContext(PatientsContext);
 
 	const handleClickOpen = () => {
+		console.log(patient);
 		setOpen(true);
 	};
 
@@ -33,7 +31,7 @@ export default function UpdatePatientDialog(patientToUpdate, id) {
 
 	const updatePatient = () => {
 		axios
-			.put(`http://localhost:8000/patient/${id}`, patient)
+			.put(`http://localhost:8000/patient/${patient.id}`)
 			.then((response) => {
 				console.log(response);
 				handleClose();
