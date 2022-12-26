@@ -21,7 +21,6 @@ export default function UpdatePatientDialog({
 	const [patient, setPatient] = React.useState(patientToUpdate);
 
 	const handleClickOpen = () => {
-		console.log(patient);
 		setOpen(true);
 	};
 
@@ -31,14 +30,14 @@ export default function UpdatePatientDialog({
 
 	const updatePatient = () => {
 		axios
-			.put(`http://localhost:8000/patient/${patient.id}`)
+			.put(`http://localhost:8000/patient/${patient.id}`, patient)
 			.then((response) => {
 				console.log(response);
 				handleClose();
 				fetchPatients();
 			})
 			.catch((error) => {
-				console.log(error);
+				console.error(error);
 			});
 	};
 
